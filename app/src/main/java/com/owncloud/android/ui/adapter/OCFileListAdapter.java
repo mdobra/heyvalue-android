@@ -174,6 +174,7 @@ public class OCFileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             mStorageManager = new FileDataStorageManager(user, activity.getContentResolver());
         }
 
+        //noinspection deprecation
         userId = AccountManager
             .get(activity)
             .getUserData(this.user.toPlatformAccount(),
@@ -197,6 +198,7 @@ public class OCFileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         setHasStableIds(true);
 
         // initialise thumbnails cache on background thread
+        //noinspection deprecation
         new ThumbnailsCacheManager.InitDiskCacheTask().execute();
     }
 
@@ -991,6 +993,7 @@ public class OCFileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                 OCFile parentFolder = mStorageManager.getFileById(ocFile.getParentId());
                 if (parentFolder != null && (ocFile.isEncrypted() || parentFolder.isEncrypted())) {
+                    //noinspection deprecation
                     Object object = RefreshFolderOperation.getDecryptedFolderMetadata(
                         true,
                         parentFolder,
@@ -1028,6 +1031,7 @@ public class OCFileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                                                                             mStorageManager,
                                                                                             user,
                                                                                             activity);
+                        //noinspection deprecation
                         refreshFolderOperation.execute(user, activity);
                     }
                 }
@@ -1067,7 +1071,7 @@ public class OCFileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         diff.dispatchUpdatesTo(this);
     }
 
-    public void setSortOrder(@Nullable OCFile folder, FileSortOrder sortOrder) {
+    public void setSortOrder(@Nullable OCFile folder, @NonNull FileSortOrder sortOrder) {
         preferences.setSortOrder(folder, sortOrder);
 
         final var newList = sortOrder.sortCloudFiles(mFiles);
@@ -1076,6 +1080,7 @@ public class OCFileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.sortOrder = sortOrder;
     }
 
+    @NonNull
     public Set<OCFile> getCheckedItems() {
         return ocFileListDelegate.getCheckedItems();
     }
@@ -1108,6 +1113,10 @@ public class OCFileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void resetLastTimestamp() {
         lastTimestamp = -1;
+    }
+
+    public long getLastTimestamp() {
+        return lastTimestamp;
     }
 
     @Override
@@ -1199,7 +1208,7 @@ public class OCFileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @NonNull
     @Override
-    public String getPopupText(View view, int position) {
+    public String getPopupText(@NonNull View view, int position) {
         OCFile file = getItem(position);
 
         if (file == null || sortOrder == null) {
