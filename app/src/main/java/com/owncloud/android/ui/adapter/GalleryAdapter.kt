@@ -60,6 +60,8 @@ class GalleryAdapter(
     private var storageManager: FileDataStorageManager
 
     init {
+        setHasStableIds(true)
+
         storageManager = transferServiceGetter.storageManager
 
         ocFileListDelegate = OCFileListDelegate(
@@ -76,6 +78,10 @@ class GalleryAdapter(
             showShareAvatar = false,
             viewThemeUtils
         )
+    }
+
+    override fun getItemId(section: Int, position: Int): Long {
+        return files[section].rows[position].files.first().fileId
     }
 
     override fun showFooters(): Boolean = false
