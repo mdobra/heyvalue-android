@@ -81,7 +81,7 @@ class GalleryAdapter(
     }
 
     override fun getItemId(section: Int, position: Int): Long {
-        return files[section].rows[position].files.first().fileId
+        return files[section].rows[position].files.sumOf { it.hashCode() }.toLong()
     }
 
     override fun showFooters(): Boolean = false
